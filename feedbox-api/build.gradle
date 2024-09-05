@@ -1,6 +1,3 @@
-plugins {
-}
-
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -8,4 +5,5 @@ dependencies {
 
     implementation(project(":feedbox-domain"))
     implementation(project(":feedbox-application"))
+    implementation(project(":feedbox-infrastructure"))
 }

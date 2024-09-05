@@ -1,4 +1,10 @@
 services:
+  # user-api-server는 유저정보 팀에서 관리하는 api server라고 가정
+  user-api-server:
+    image: 'shinjewoo/user-team-api'
+    container_name: user-api-server
+    ports:
+      - "8088:8080"
   zookeeper:
     image: 'bitnami/zookeeper:3.7.2'
     container_name: zookeeper
