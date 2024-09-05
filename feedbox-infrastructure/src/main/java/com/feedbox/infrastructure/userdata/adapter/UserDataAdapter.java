@@ -1,9 +1,9 @@
-package com.feedbox.userdata.adapter;
+package com.feedbox.infrastructure.userdata.adapter;
 
 import com.feedbox.application.post.port.out.UserDataPort;
-import com.feedbox.userdata.client.UserDataClient;
-import com.feedbox.userdata.dto.CategoryResponse;
-import com.feedbox.userdata.dto.UserResponse;
+import com.feedbox.infrastructure.userdata.client.UserDataClient;
+import com.feedbox.infrastructure.userdata.dto.CategoryResponse;
+import com.feedbox.infrastructure.userdata.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

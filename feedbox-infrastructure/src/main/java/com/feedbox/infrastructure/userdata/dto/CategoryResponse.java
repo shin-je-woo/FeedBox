@@ -1,4 +1,4 @@
-package com.feedbox.userdata.dto;
+package com.feedbox.infrastructure.userdata.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResponse {
+public class CategoryResponse {
     private Long id;
-    private String email;
     private String name;
 }

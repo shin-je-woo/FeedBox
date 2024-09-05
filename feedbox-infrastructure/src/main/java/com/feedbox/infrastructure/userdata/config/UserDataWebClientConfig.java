@@ -1,4 +1,4 @@
-package com.feedbox.userdata.config;
+package com.feedbox.infrastructure.userdata.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

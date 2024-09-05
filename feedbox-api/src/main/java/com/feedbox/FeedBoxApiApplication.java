@@ -1,10 +1,8 @@
-package com.feedbox.api;
+package com.feedbox;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 
-@ComponentScan(basePackages = {"com.feedbox"})
 @SpringBootApplication
 public class FeedBoxApiApplication {
 

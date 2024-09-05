@@ -1,2 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/feedbox?serverTimezone=Asia/Seoul
+    username: feedbox_user
+    password: feedbox_password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+    hibernate:
+      ddl-auto: create
+
 userdata-server:
   url: localhost:8088

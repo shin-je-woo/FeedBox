@@ -1,7 +1,7 @@
-package com.feedbox.userdata.client;
+package com.feedbox.infrastructure.userdata.client;
 
-import com.feedbox.userdata.dto.CategoryResponse;
-import com.feedbox.userdata.dto.UserResponse;
+import com.feedbox.infrastructure.userdata.dto.CategoryResponse;
+import com.feedbox.infrastructure.userdata.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
