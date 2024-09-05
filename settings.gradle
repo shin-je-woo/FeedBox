@@ -1,0 +1,6 @@
+rootProject.name = 'feedbox'
+include 'feedbox-domain'
+include 'feedbox-api'
+include 'feedbox-application'
+include 'feedbox-infrastructure'
+
