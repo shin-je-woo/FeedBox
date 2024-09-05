@@ -6,6 +6,7 @@ import com.feedbox.application.post.port.in.PostReadUseCase;
 import com.feedbox.application.post.port.in.PostUpdateUseCase;
 import com.feedbox.application.post.port.in.dto.PostCreateDto;
 import com.feedbox.application.post.port.in.dto.PostUpdateDto;
+import com.feedbox.application.post.port.out.OriginalPostMessageProducePort;
 import com.feedbox.application.post.port.out.PostPersistencePort;
 import com.feedbox.domain.model.Post;
 import com.feedbox.domain.model.ResolvedPost;
@@ -18,7 +19,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class PostService implements PostCreateUseCase, PostReadUseCase, PostUpdateUseCase, PostDeleteUseCase {
 
     private final PostPersistencePort postPersistencePort;
+    private final OriginalPostMessageProducePort originalPostMessageProducePort;
 
+    /**
+     * 콘텐츠를 생성한다.
+     * 1) Mysql에 저장 2) Kafka 메시지 발행
+     */
+    @Transactional
     @Override
     public Post create(PostCreateDto postCreateDto) {
         Post post = Post.of(
@@ -27,7 +34,9 @@ public class PostService implements PostCreateUseCase, PostReadUseCase, PostUpda
                 postCreateDto.getUserId(),
                 postCreateDto.getCategoryId()
         );
-        return postPersistencePort.save(post);
+        Post savedPost = postPersistencePort.save(post);
+        originalPostMessageProducePort.sendCreateMessage(savedPost);
+        return savedPost;
     }
 
     @Override
@@ -36,7 +45,9 @@ public class PostService implements PostCreateUseCase, PostReadUseCase, PostUpda
     }
 
     /**
-     * 도메인 영역을 보호하지만, Layer를 나눴기 때문에 JPA의 장점인 변경감지를 사용 못한다.
+     * 콘텐츠를 수정한다.
+     * 1) Mysql에 저장 2) Kafka 메시지 발행
+     * 도메인 영역을 보호하지만, Layer를 나눴기 때문에 JPA의 장점인 변경감지를 사용하지 못한다.
      */
     @Transactional
     @Override
@@ -47,14 +58,21 @@ public class PostService implements PostCreateUseCase, PostReadUseCase, PostUpda
                 postUpdateDto.getContent(),
                 postUpdateDto.getCategoryId()
         );
-        return postPersistencePort.save(post);
+        Post updatedPost = postPersistencePort.save(post);
+        originalPostMessageProducePort.sendUpdateMessage(updatedPost);
+        return updatedPost;
     }
 
+    /**
+     * 콘텐츠를 삭제한다.
+     * 1) Mysql에 저장 2) Kafka 메시지 발행
+     */
     @Override
     public void delete(Long postId) {
         Post post = postPersistencePort.findById(postId);
         if (post == null) return;
         post.delete();
-        postPersistencePort.save(post);
+        Post deletedPost = postPersistencePort.save(post);
+        originalPostMessageProducePort.sendDeleteMessage(deletedPost);
     }
 }
