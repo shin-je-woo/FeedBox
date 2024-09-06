@@ -23,7 +23,7 @@ public class PostInspectWorker {
     private final InspectedPostMessageProducePort inspectedPostMessageProducePort;
 
     /**
-     * 원본 Post를 Kafka Consume 해서 검수(Chat-GPT)하고, 검수된 Post를 Kafka Produce 한다.
+     * 원본 컨텐츠를 Kafka Consume 해서 검수(Chat-GPT)하고, 검수된 컨텐츠를 Kafka Produce 한다.
      */
     @KafkaListener(
             topics = {Topic.ORIGINAL_POST},

@@ -24,6 +24,11 @@ public class SubscribingPostAdapter implements SubscribingPostPort {
     }
 
     @Override
+    public void removePostFromFollowerInboxes(Long postId) {
+        subscribingPostRepository.deleteAllPostId(postId);
+    }
+
+    @Override
     public List<Long> listPostIdsByFollowerIdWithPagination(Long followerId, int pageNumber, int pageSize) {
         return subscribingPostRepository.findAllByFollowerIdWithPagination(followerId, pageNumber, pageSize)
                 .stream()

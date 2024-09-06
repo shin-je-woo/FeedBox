@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class FeedBoxWorkerApplication {
+public class PostInspectWorkerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(FeedBoxWorkerApplication.class, args);
+        SpringApplication.run(PostInspectWorkerApplication.class, args);
     }
 }
