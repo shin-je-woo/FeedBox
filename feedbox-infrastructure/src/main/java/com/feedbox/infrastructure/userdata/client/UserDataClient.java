@@ -16,7 +16,7 @@ public class UserDataClient {
 
     public CategoryResponse getCategoryById(Long categoryId) {
         return userDataWebClient.get()
-                .uri("/categories/", categoryId)
+                .uri("/categories/" + categoryId)
                 .retrieve()
                 .bodyToMono(CategoryResponse.class)
                 .block();

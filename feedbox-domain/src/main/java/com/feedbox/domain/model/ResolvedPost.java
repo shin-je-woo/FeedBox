@@ -9,8 +9,6 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class ResolvedPost {
 
     private Long id;

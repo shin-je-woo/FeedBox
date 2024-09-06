@@ -2,10 +2,7 @@ package com.feedbox.infrastructure.chatgpt.client;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.feedbox.infrastructure.chatgpt.model.ChatGptMessage;
-import com.feedbox.infrastructure.chatgpt.model.ChatGptRequest;
-import com.feedbox.infrastructure.chatgpt.model.ChatGptResponse;
-import com.feedbox.infrastructure.chatgpt.model.ChatGptRole;
+import com.feedbox.infrastructure.chatgpt.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -27,8 +24,8 @@ public class ChatGptClient {
     private static final String TOKEN_TYPE = "Bearer ";
     private static final String GPT_MODEL = "gpt-3.5-turbo";
 
-    public String testChatGpt(String content) {
-        List<ChatGptMessage> messages = createMessages(content);
+    public String instructAndAsk(ChatGptPolicy policy, String question) {
+        List<ChatGptMessage> messages = createMessages(policy, question);
         String result = chatGptWebClient.post()
                 .uri(REQUEST_URI)
                 .header(HttpHeaders.AUTHORIZATION, TOKEN_TYPE + apiKey)
@@ -45,10 +42,16 @@ public class ChatGptClient {
         return extractContent(result);
     }
 
-    private List<ChatGptMessage> createMessages(String content) {
+    private List<ChatGptMessage> createMessages(ChatGptPolicy policy, String question) {
         return List.of(
-                ChatGptMessage.of(ChatGptRole.SYSTEM.toString(), "너는 나의 박사님이야"),
-                ChatGptMessage.of(ChatGptRole.USER.toString(), content));
+                // 지침을 설명한다.
+                ChatGptMessage.of(ChatGptRole.SYSTEM.toString(), policy.getInstruction()),
+                // 지침에 따른 예제 질문을 알려준다.
+                ChatGptMessage.of(ChatGptRole.USER.toString(), policy.getExampleContent()),
+                // 지침에 따른 예제 결과를 알려준다.
+                ChatGptMessage.of(ChatGptRole.ASSISTANT.toString(), policy.getExampleContent()),
+                // 실제 유저가 질문할 내용
+                ChatGptMessage.of(ChatGptRole.USER.toString(), question));
     }
 
     private String extractContent(String result) {

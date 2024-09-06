@@ -1,6 +1,8 @@
 package com.feedbox.api.post.controller;
 
-import com.feedbox.application.post.port.out.TestChatGptPort;
+import com.feedbox.application.post.port.in.PostInspectUseCase;
+import com.feedbox.domain.model.InspectedPost;
+import com.feedbox.domain.model.Post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,12 +12,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class TestController {
 
-    private final TestChatGptPort testChatGptPort;
+    private final PostInspectUseCase postInspectUseCase;
 
     @GetMapping("/test")
-    public String test(
-            @RequestParam String content
+    public InspectedPost test(
+            @RequestParam String title,
+            @RequestParam String content,
+            @RequestParam Long categoryId
     ) {
-        return testChatGptPort.test(content);
+        return postInspectUseCase.inspectAndGetIfValid(
+                Post.of(
+                        title,
+                        content,
+                        categoryId,
+                        categoryId
+                )
+        );
     }
 }
