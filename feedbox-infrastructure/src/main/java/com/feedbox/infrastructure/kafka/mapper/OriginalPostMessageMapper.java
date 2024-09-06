@@ -4,7 +4,7 @@ import com.feedbox.domain.model.Post;
 import com.feedbox.infrastructure.kafka.common.OperationType;
 import com.feedbox.infrastructure.kafka.message.OriginalPostMessage;
 
-public class PostMessageMapper {
+public class OriginalPostMessageMapper {
 
     public static OriginalPostMessage toMessage(Long id, Post post, OperationType operationType) {
         return OriginalPostMessage.builder()

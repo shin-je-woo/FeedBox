@@ -6,7 +6,7 @@ import com.feedbox.application.post.port.out.OriginalPostMessageProducePort;
 import com.feedbox.domain.model.Post;
 import com.feedbox.infrastructure.kafka.common.OperationType;
 import com.feedbox.infrastructure.kafka.common.Topic;
-import com.feedbox.infrastructure.kafka.mapper.PostMessageMapper;
+import com.feedbox.infrastructure.kafka.mapper.OriginalPostMessageMapper;
 import com.feedbox.infrastructure.kafka.message.OriginalPostMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -35,7 +35,7 @@ public class OriginalPostMessageProducerAdapter implements OriginalPostMessagePr
     }
 
     private void sendMessage(Post post, OperationType operationType) {
-        OriginalPostMessage message = PostMessageMapper.toMessage(post.getId(), post, operationType);
+        OriginalPostMessage message = OriginalPostMessageMapper.toMessage(post.getId(), post, operationType);
         try {
             kafkaTemplate.send(
                     Topic.ORIGINAL_POST,
