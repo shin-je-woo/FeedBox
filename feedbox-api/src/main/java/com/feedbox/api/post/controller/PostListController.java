@@ -1,6 +1,9 @@
 package com.feedbox.api.post.controller;
 
 import com.feedbox.api.post.model.dto.response.PostListResponse;
+import com.feedbox.api.post.model.mapper.ResolvedPostMapper;
+import com.feedbox.application.subscribing.port.in.SubscribingPostListUseCase;
+import com.feedbox.domain.model.ResolvedPost;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,17 +12,24 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/posts")
+@RequestMapping("/posts/lists")
 public class PostListController {
 
-    @GetMapping("/lists/{userId}") // 실제로는 HTTP 명세가 이렇지 않겠지만, 로그인 기능 생략으로
+    private final SubscribingPostListUseCase subscribingPostListUseCase;
+
+    @GetMapping("/inbox/{userId}") // 실제로는 HTTP 명세가 이렇지 않겠지만, 로그인 기능 생략으로
     public ResponseEntity<List<PostListResponse>> listSubscribingPosts(
-            @PathVariable Long userId
+            @PathVariable Long userId,
+            @RequestParam(required = false, defaultValue = "0") int page
     ) {
-        return ResponseEntity.ok().build();
+        List<ResolvedPost> resolvedPosts = subscribingPostListUseCase.listSubscribingInboxPosts(userId, page);
+        List<PostListResponse> postListResponses = resolvedPosts.stream()
+                .map(ResolvedPostMapper::toListResponse)
+                .toList();
+        return ResponseEntity.ok().body(postListResponses);
     }
 
-    @GetMapping("/lists/search")
+    @GetMapping("/search")
     public ResponseEntity<List<PostListResponse>> searchPosts(
             @RequestParam String query
     ) {

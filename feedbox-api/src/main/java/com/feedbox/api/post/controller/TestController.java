@@ -1,6 +1,6 @@
 package com.feedbox.api.post.controller;
 
-import com.feedbox.application.post.port.in.PostInspectUseCase;
+import com.feedbox.application.inspect.port.in.PostInspectUseCase;
 import com.feedbox.domain.model.InspectedPost;
 import com.feedbox.domain.model.Post;
 import lombok.RequiredArgsConstructor;

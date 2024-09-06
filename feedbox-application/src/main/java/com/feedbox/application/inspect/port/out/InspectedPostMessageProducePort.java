@@ -1,4 +1,4 @@
-package com.feedbox.application.post.port.out;
+package com.feedbox.application.inspect.port.out;
 
 import com.feedbox.domain.model.InspectedPost;
 

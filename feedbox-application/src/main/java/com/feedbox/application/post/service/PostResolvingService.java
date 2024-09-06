@@ -35,6 +35,7 @@ public class PostResolvingService implements PostResolvingUseCase {
     @Override
     public List<ResolvedPost> resolvePosts(List<Long> postIds) {
         // TODO 포스트 + 유저 데이터 합치기
-        return List.of();
+        // 지금 로직이면 매번 컨텐츠마다 DB, API 호출하기 때문에 비효율
+        return postIds.stream().map(this::resolvePostById).toList();
     }
 }

@@ -11,9 +11,11 @@ spring:
         format_sql: true
     hibernate:
       ddl-auto: create
-
   kafka:
     bootstrap-servers: localhost:9092, localhost:9093, localhost:9094
+  data:
+    mongodb:
+      uri: mongodb://user:password@localhost:27017/feedbox?authSource=admin
 
 userdata-server:
   url: http://localhost:8088

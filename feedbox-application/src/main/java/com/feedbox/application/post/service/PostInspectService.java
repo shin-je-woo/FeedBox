@@ -1,7 +1,7 @@
 package com.feedbox.application.post.service;
 
-import com.feedbox.application.post.port.in.PostInspectUseCase;
-import com.feedbox.application.post.port.out.PostInspectPort;
+import com.feedbox.application.inspect.port.in.PostInspectUseCase;
+import com.feedbox.application.inspect.port.out.PostInspectPort;
 import com.feedbox.application.post.port.out.UserDataPort;
 import com.feedbox.domain.model.InspectedPost;
 import com.feedbox.domain.model.InspectionResult;

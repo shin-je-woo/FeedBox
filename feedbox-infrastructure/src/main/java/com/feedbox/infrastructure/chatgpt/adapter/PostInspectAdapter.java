@@ -2,7 +2,7 @@ package com.feedbox.infrastructure.chatgpt.adapter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.feedbox.application.post.port.out.PostInspectPort;
+import com.feedbox.application.inspect.port.out.PostInspectPort;
 import com.feedbox.domain.model.InspectionResult;
 import com.feedbox.domain.model.Post;
 import com.feedbox.infrastructure.chatgpt.client.ChatGptClient;
