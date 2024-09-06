@@ -21,21 +21,23 @@ public class OriginalPostMessageProducerAdapter implements OriginalPostMessagePr
 
     @Override
     public void sendCreateMessage(Post post) {
-        sendMessage(post, OperationType.CREATE);
+        OriginalPostMessage message = OriginalPostMessageMapper.toMessage(post.getId(), post, OperationType.CREATE);
+        sendMessage(message);
     }
 
     @Override
     public void sendUpdateMessage(Post post) {
-        sendMessage(post, OperationType.UPDATE);
+        OriginalPostMessage message = OriginalPostMessageMapper.toMessage(post.getId(), post, OperationType.UPDATE);
+        sendMessage(message);
     }
 
     @Override
-    public void sendDeleteMessage(Post post) {
-        sendMessage(post, OperationType.DELETE);
+    public void sendDeleteMessage(Long postId) {
+        OriginalPostMessage message = OriginalPostMessageMapper.toMessage(postId, null, OperationType.DELETE);
+        sendMessage(message);
     }
 
-    private void sendMessage(Post post, OperationType operationType) {
-        OriginalPostMessage message = OriginalPostMessageMapper.toMessage(post.getId(), post, operationType);
+    private void sendMessage(OriginalPostMessage message) {
         try {
             kafkaTemplate.send(
                     Topic.ORIGINAL_POST,

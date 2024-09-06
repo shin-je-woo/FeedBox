@@ -1,0 +1,8 @@
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.2'
+
+    implementation(project(":feedbox-domain"))
+    implementation(project(":feedbox-application"))
+    implementation(project(":feedbox-infrastructure"))
+}

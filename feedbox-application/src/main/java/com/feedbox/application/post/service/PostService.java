@@ -73,6 +73,6 @@ public class PostService implements PostCreateUseCase, PostReadUseCase, PostUpda
         if (post == null) return;
         post.delete();
         Post deletedPost = postPersistencePort.save(post);
-        originalPostMessageProducePort.sendDeleteMessage(deletedPost);
+        originalPostMessageProducePort.sendDeleteMessage(deletedPost.getId());
     }
 }

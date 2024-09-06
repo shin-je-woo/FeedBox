@@ -24,4 +24,17 @@ public class OriginalPostMessageMapper {
                 )
                 .build();
     }
+
+    public static Post toDomain(OriginalPostMessage originalPostMessage) {
+        return Post.builder()
+                .id(originalPostMessage.getPayload().getId())
+                .title(originalPostMessage.getPayload().getTitle())
+                .content(originalPostMessage.getPayload().getContent())
+                .userId(originalPostMessage.getPayload().getUserId())
+                .categoryId(originalPostMessage.getPayload().getCategoryId())
+                .createdAt(originalPostMessage.getPayload().getCreatedAt())
+                .updatedAt(originalPostMessage.getPayload().getUpdatedAt())
+                .deletedAt(originalPostMessage.getPayload().getDeletedAt())
+                .build();
+    }
 }

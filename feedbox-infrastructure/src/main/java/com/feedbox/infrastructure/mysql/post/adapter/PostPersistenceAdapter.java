@@ -1,6 +1,5 @@
 package com.feedbox.infrastructure.mysql.post.adapter;
 
-import com.feedbox.application.post.exception.PostNotFoundException;
 import com.feedbox.application.post.port.out.PostPersistencePort;
 import com.feedbox.domain.model.Post;
 import com.feedbox.infrastructure.mysql.post.entity.PostEntity;
@@ -24,7 +23,7 @@ public class PostPersistenceAdapter implements PostPersistencePort {
     @Override
     public Post findById(Long id) {
         PostEntity postEntity = postJpaRepository.findById(id)
-                .orElseThrow(PostNotFoundException::new);
+                .orElseThrow(RuntimeException::new);
         return PostEntityMapper.toDomain(postEntity);
     }
 }

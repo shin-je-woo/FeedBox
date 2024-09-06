@@ -21,21 +21,27 @@ public class InspectedPostMessageProducerAdapter implements InspectedPostMessage
 
     @Override
     public void sendCreateMessage(InspectedPost inspectedPost) {
-        sendMessage(inspectedPost, OperationType.CREATE);
+        InspectedPostMessage message = InspectedPostMessageMapper.toMessage(inspectedPost, OperationType.CREATE);
+        sendMessage(message);
     }
 
     @Override
     public void sendUpdateMessage(InspectedPost inspectedPost) {
-        sendMessage(inspectedPost, OperationType.UPDATE);
+        InspectedPostMessage message = InspectedPostMessageMapper.toMessage(inspectedPost, OperationType.UPDATE);
+        sendMessage(message);
     }
 
     @Override
-    public void sendDeleteMessage(InspectedPost inspectedPost) {
-        sendMessage(inspectedPost, OperationType.DELETE);
+    public void sendDeleteMessage(Long postId) {
+        InspectedPostMessage message = InspectedPostMessage.builder()
+                .id(postId)
+                .payload(null)
+                .operationType(OperationType.DELETE)
+                .build();
+        sendMessage(message);
     }
 
-    private void sendMessage(InspectedPost inspectedPost, OperationType operationType) {
-        InspectedPostMessage message = InspectedPostMessageMapper.toMessage(inspectedPost, operationType);
+    private void sendMessage(InspectedPostMessage message) {
         try {
             kafkaTemplate.send(
                     Topic.INSPECTED_POST,

@@ -6,5 +6,5 @@ public interface OriginalPostMessageProducePort {
 
     void sendCreateMessage(Post post);
     void sendUpdateMessage(Post post);
-    void sendDeleteMessage(Post post);
+    void sendDeleteMessage(Long postId);
 }
