@@ -8,6 +8,8 @@ import com.feedbox.infrastructure.mysql.post.respoitory.PostJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class PostPersistenceAdapter implements PostPersistencePort {
@@ -25,5 +27,12 @@ public class PostPersistenceAdapter implements PostPersistencePort {
         PostEntity postEntity = postJpaRepository.findById(id)
                 .orElseThrow(RuntimeException::new);
         return PostEntityMapper.toDomain(postEntity);
+    }
+
+    @Override
+    public List<Post> listByIds(List<Long> postIds) {
+        return postJpaRepository.findAllById(postIds).stream()
+                .map(PostEntityMapper::toDomain)
+                .toList();
     }
 }

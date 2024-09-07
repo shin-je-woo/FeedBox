@@ -9,8 +9,11 @@ import com.feedbox.domain.model.ResolvedPost;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -26,7 +29,7 @@ public class PostResolvingService implements PostResolvingUseCase {
      * PostPersistencePort 통해 Post데이터 Get (Mysql)
      * UserDataPort를 통해 UserData Get (유저정보 서버 API)
      * 기존 데이터가 있으면 바로 반환 (Cache)
-     *
+     * <p>
      * Port를 통해 메시지를 주고 받기 때문에 Adapter의 세부 구현 내용을 몰라도 된다는 장점이 있음
      */
     @Override
@@ -37,17 +40,31 @@ public class PostResolvingService implements PostResolvingUseCase {
             return cacheData;
         }
         Post post = postPersistencePort.findById(postId);
-        ResolvedPost resolvedPost = resolvePost(post);
-        resolvedPostCachePort.set(resolvedPost);
-        log.info("[PostResolvingService] Cache에 resolvedPost가 없어서 저장했습니다. {}", resolvedPost);
         return resolvePost(post);
     }
 
     @Override
     public List<ResolvedPost> resolvePosts(List<Long> postIds) {
-        // TODO 포스트 + 유저 데이터 합치기
-        // 지금 로직이면 매번 컨텐츠마다 DB, API 호출하기 때문에 비효율
-        return postIds.stream().map(this::resolvePostById).toList();
+        if (CollectionUtils.isEmpty(postIds)) return Collections.emptyList();
+        ArrayList<ResolvedPost> resolvedPosts = new ArrayList<>();
+        // 1. 캐시 저장소(Redis)에서 multiGet으로 컨텐츠를 가져온다.
+        List<ResolvedPost> cacheHitPosts = resolvedPostCachePort.getList(postIds);
+        resolvedPosts.addAll(cacheHitPosts);
+        // 2. Cache Miss된 컨텐츠를 찾아서 조회한다.
+        List<Long> cacheMissPostIds = getNotMatchedPostIds(postIds, cacheHitPosts);
+        List<Post> missingPosts = postPersistencePort.listByIds(cacheMissPostIds);
+        List<ResolvedPost> missingResolvedPosts = missingPosts.stream()
+                .filter(Objects::nonNull)
+                .map(this::resolvePost)
+                .toList();
+        resolvedPosts.addAll(missingResolvedPosts);
+        // 3. 요청한 postIds 순서대로 정렬해서 반환한다.
+        Map<Long, ResolvedPost> resolvedPostMap = resolvedPosts.stream()
+                .collect(Collectors.toMap(ResolvedPost::getId, Function.identity()));
+        return postIds.stream()
+                .map(resolvedPostMap::get)
+                .filter(Objects::nonNull)
+                .toList();
     }
 
     @Override
@@ -65,6 +82,16 @@ public class PostResolvingService implements PostResolvingUseCase {
     private ResolvedPost resolvePost(Post post) {
         String userName = userDataPort.getUserNameByUserId(post.getUserId());
         String categoryName = userDataPort.getCategoryNameByCategoryId(post.getCategoryId());
-        return ResolvedPost.of(post, userName, categoryName);
+        ResolvedPost resolvedPost = ResolvedPost.of(post, userName, categoryName);
+        resolvedPostCachePort.set(resolvedPost);
+        log.info("[PostResolvingService] Cache에 resolvedPost를 저장했습니다. {}", resolvedPost);
+        return resolvedPost;
+    }
+
+    private List<Long> getNotMatchedPostIds(List<Long> postIds, List<ResolvedPost> cacheHitPosts) {
+        return postIds.stream()
+                .filter(postId -> cacheHitPosts.stream()
+                        .noneMatch(resolvedPost -> resolvedPost.getId().equals(postId))
+                ).toList();
     }
 }

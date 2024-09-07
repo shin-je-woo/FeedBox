@@ -7,8 +7,12 @@ import com.feedbox.domain.model.ResolvedPost;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.time.Duration;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
@@ -43,6 +47,22 @@ public class ResolvedPostCacheAdapter implements ResolvedPostCachePort {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public List<ResolvedPost> getList(List<Long> postIds) {
+        List<String> keyList = postIds.stream().map(this::generateKey).toList();
+        List<String> jsonStrings = redisTemplate.opsForValue().multiGet(keyList);
+        if (CollectionUtils.isEmpty(jsonStrings)) return Collections.emptyList();
+        return jsonStrings.stream()
+                .filter(Objects::nonNull)
+                .map(jsonString -> {
+                    try {
+                        return objectMapper.readValue(jsonString, ResolvedPost.class);
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
+                }).toList();
     }
 
     @Override
