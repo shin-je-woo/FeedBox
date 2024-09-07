@@ -33,16 +33,14 @@ public class PostResolvingService implements PostResolvingUseCase {
     public ResolvedPost resolvePostById(Long postId) {
         ResolvedPost cacheData = resolvedPostCachePort.get(postId);
         if (cacheData != null) {
-            log.info("[PostResolvingService] Cache에 데이터가 있어서 CacheData를 반환합니다. {}", cacheData);
+            log.info("[PostResolvingService] Cache에 resolvedPost가 있어서 CacheData를 반환합니다. {}", cacheData);
             return cacheData;
         }
         Post post = postPersistencePort.findById(postId);
-        String userName = userDataPort.getUserNameByUserId(post.getUserId());
-        String categoryName = userDataPort.getCategoryNameByCategoryId(post.getCategoryId());
-        ResolvedPost resolvedPost = ResolvedPost.of(post, userName, categoryName);
-        log.info("[PostResolvingService] Cache에 데이터가 없어서 새로운 데이터를 반환합니다. {}", resolvedPost);
+        ResolvedPost resolvedPost = resolvePost(post);
         resolvedPostCachePort.set(resolvedPost);
-        return resolvedPost;
+        log.info("[PostResolvingService] Cache에 resolvedPost가 없어서 저장했습니다. {}", resolvedPost);
+        return resolvePost(post);
     }
 
     @Override
@@ -50,5 +48,23 @@ public class PostResolvingService implements PostResolvingUseCase {
         // TODO 포스트 + 유저 데이터 합치기
         // 지금 로직이면 매번 컨텐츠마다 DB, API 호출하기 때문에 비효율
         return postIds.stream().map(this::resolvePostById).toList();
+    }
+
+    @Override
+    public void resolveAndSaveCache(Post post) {
+        ResolvedPost resolvedPost = resolvePost(post);
+        resolvedPostCachePort.set(resolvedPost);
+        log.info("[PostResolvingService] Cache에 resolvedPost를 저장했습니다. {}", resolvedPost);
+    }
+
+    @Override
+    public void deleteCachedResolvedPost(Long postId) {
+        resolvedPostCachePort.delete(postId);
+    }
+
+    private ResolvedPost resolvePost(Post post) {
+        String userName = userDataPort.getUserNameByUserId(post.getUserId());
+        String categoryName = userDataPort.getCategoryNameByCategoryId(post.getCategoryId());
+        return ResolvedPost.of(post, userName, categoryName);
     }
 }

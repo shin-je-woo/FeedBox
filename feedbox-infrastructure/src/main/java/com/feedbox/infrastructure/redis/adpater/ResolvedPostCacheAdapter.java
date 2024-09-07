@@ -30,7 +30,7 @@ public class ResolvedPostCacheAdapter implements ResolvedPostCachePort {
         redisTemplate.opsForValue().set(
                 generateKey(resolvedPost.getId()),
                 jsonString,
-                Duration.ofHours(2L)
+                Duration.ofDays(7L)
         );
     }
 
@@ -43,6 +43,11 @@ public class ResolvedPostCacheAdapter implements ResolvedPostCachePort {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void delete(Long postId) {
+        redisTemplate.delete(generateKey(postId));
     }
 
     private String generateKey(Long postId) {
