@@ -1,9 +1,6 @@
 package com.feedbox.application.post.service;
 
-import com.feedbox.application.post.port.in.PostCreateUseCase;
-import com.feedbox.application.post.port.in.PostDeleteUseCase;
-import com.feedbox.application.post.port.in.PostReadUseCase;
-import com.feedbox.application.post.port.in.PostUpdateUseCase;
+import com.feedbox.application.post.port.in.*;
 import com.feedbox.application.post.port.in.dto.PostCreateDto;
 import com.feedbox.application.post.port.in.dto.PostUpdateDto;
 import com.feedbox.application.post.port.out.OriginalPostMessageProducePort;
@@ -18,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class PostService implements PostCreateUseCase, PostReadUseCase, PostUpdateUseCase, PostDeleteUseCase {
 
+    private final PostResolvingUseCase postResolvingUseCase;
     private final PostPersistencePort postPersistencePort;
     private final OriginalPostMessageProducePort originalPostMessageProducePort;
 
@@ -41,7 +39,7 @@ public class PostService implements PostCreateUseCase, PostReadUseCase, PostUpda
 
     @Override
     public ResolvedPost read(Long id) {
-        return null;
+        return postResolvingUseCase.resolvePostById(id);
     }
 
     /**
