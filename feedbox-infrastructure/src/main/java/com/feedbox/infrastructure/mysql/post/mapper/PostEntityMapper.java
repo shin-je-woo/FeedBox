@@ -1,6 +1,6 @@
 package com.feedbox.infrastructure.mysql.post.mapper;
 
-import com.feedbox.domain.model.Post;
+import com.feedbox.domain.model.post.Post;
 import com.feedbox.infrastructure.mysql.post.entity.PostEntity;
 
 public class PostEntityMapper {

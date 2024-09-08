@@ -3,7 +3,7 @@ package com.feedbox.infrastructure.redis.adpater;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.feedbox.application.post.port.out.ResolvedPostCachePort;
-import com.feedbox.domain.model.ResolvedPost;
+import com.feedbox.domain.model.post.ResolvedPost;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;

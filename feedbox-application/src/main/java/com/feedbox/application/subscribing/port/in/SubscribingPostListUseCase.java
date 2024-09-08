@@ -1,6 +1,6 @@
 package com.feedbox.application.subscribing.port.in;
 
-import com.feedbox.domain.model.ResolvedPost;
+import com.feedbox.domain.model.post.ResolvedPost;
 
 import java.util.List;
 

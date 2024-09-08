@@ -1,6 +1,6 @@
 package com.feedbox.infrastructure.kafka.mapper;
 
-import com.feedbox.domain.model.Post;
+import com.feedbox.domain.model.post.Post;
 import com.feedbox.infrastructure.kafka.common.OperationType;
 import com.feedbox.infrastructure.kafka.message.OriginalPostMessage;
 

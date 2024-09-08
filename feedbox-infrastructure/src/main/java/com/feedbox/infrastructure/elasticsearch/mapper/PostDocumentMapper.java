@@ -1,6 +1,6 @@
 package com.feedbox.infrastructure.elasticsearch.mapper;
 
-import com.feedbox.domain.model.InspectedPost;
+import com.feedbox.domain.model.post.InspectedPost;
 import com.feedbox.infrastructure.elasticsearch.document.PostDocument;
 
 import java.time.LocalDateTime;

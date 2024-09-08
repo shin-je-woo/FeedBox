@@ -4,7 +4,7 @@ import com.feedbox.api.post.model.dto.response.PostListResponse;
 import com.feedbox.api.post.model.mapper.ResolvedPostMapper;
 import com.feedbox.application.search.port.in.PostSearchUseCase;
 import com.feedbox.application.subscribing.port.in.SubscribingPostListUseCase;
-import com.feedbox.domain.model.ResolvedPost;
+import com.feedbox.domain.model.post.ResolvedPost;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

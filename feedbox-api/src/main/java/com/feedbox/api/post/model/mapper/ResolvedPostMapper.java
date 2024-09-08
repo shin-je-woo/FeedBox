@@ -1,7 +1,7 @@
 package com.feedbox.api.post.model.mapper;
 
 import com.feedbox.api.post.model.dto.response.PostListResponse;
-import com.feedbox.domain.model.ResolvedPost;
+import com.feedbox.domain.model.post.ResolvedPost;
 
 public class ResolvedPostMapper {
 

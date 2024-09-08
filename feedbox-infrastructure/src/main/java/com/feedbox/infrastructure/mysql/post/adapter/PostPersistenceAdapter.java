@@ -1,7 +1,7 @@
 package com.feedbox.infrastructure.mysql.post.adapter;
 
 import com.feedbox.application.post.port.out.PostPersistencePort;
-import com.feedbox.domain.model.Post;
+import com.feedbox.domain.model.post.Post;
 import com.feedbox.infrastructure.mysql.post.entity.PostEntity;
 import com.feedbox.infrastructure.mysql.post.mapper.PostEntityMapper;
 import com.feedbox.infrastructure.mysql.post.respoitory.PostJpaRepository;

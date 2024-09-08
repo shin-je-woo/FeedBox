@@ -1,7 +1,7 @@
 package com.feedbox.infrastructure.mongodb.adpater;
 
 import com.feedbox.application.subscribing.port.out.SubscribingPostPort;
-import com.feedbox.domain.model.Post;
+import com.feedbox.domain.model.post.Post;
 import com.feedbox.infrastructure.mongodb.document.SubscribingPostDocument;
 import com.feedbox.infrastructure.mongodb.repository.SubscribingPostRepository;
 import lombok.RequiredArgsConstructor;

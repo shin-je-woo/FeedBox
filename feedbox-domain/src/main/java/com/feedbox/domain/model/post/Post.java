@@ -1,4 +1,4 @@
-package com.feedbox.domain.model;
+package com.feedbox.domain.model.post;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -6,8 +6,8 @@ import com.feedbox.api.post.model.dto.response.PostDetailResponse;
 import com.feedbox.api.post.model.dto.response.PostResponse;
 import com.feedbox.application.post.port.in.dto.PostCreateDto;
 import com.feedbox.application.post.port.in.dto.PostUpdateDto;
-import com.feedbox.domain.model.Post;
-import com.feedbox.domain.model.ResolvedPost;
+import com.feedbox.domain.model.post.Post;
+import com.feedbox.domain.model.post.ResolvedPost;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

@@ -3,7 +3,7 @@ package com.feedbox.infrastructure.kafka.adapter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.feedbox.application.post.port.out.OriginalPostMessageProducePort;
-import com.feedbox.domain.model.Post;
+import com.feedbox.domain.model.post.Post;
 import com.feedbox.infrastructure.kafka.common.OperationType;
 import com.feedbox.infrastructure.kafka.common.Topic;
 import com.feedbox.infrastructure.kafka.mapper.OriginalPostMessageMapper;

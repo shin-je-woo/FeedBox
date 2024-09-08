@@ -1,6 +1,6 @@
 package com.feedbox.application.search.port.out;
 
-import com.feedbox.domain.model.InspectedPost;
+import com.feedbox.domain.model.post.InspectedPost;
 
 import java.util.List;
 

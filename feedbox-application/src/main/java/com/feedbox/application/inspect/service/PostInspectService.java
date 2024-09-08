@@ -1,11 +1,11 @@
-package com.feedbox.application.post.service;
+package com.feedbox.application.inspect.service;
 
 import com.feedbox.application.inspect.port.in.PostInspectUseCase;
 import com.feedbox.application.inspect.port.out.PostInspectPort;
 import com.feedbox.application.post.port.out.UserDataPort;
-import com.feedbox.domain.model.InspectedPost;
-import com.feedbox.domain.model.InspectionResult;
-import com.feedbox.domain.model.Post;
+import com.feedbox.domain.model.post.InspectedPost;
+import com.feedbox.domain.model.post.InspectionResult;
+import com.feedbox.domain.model.post.Post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

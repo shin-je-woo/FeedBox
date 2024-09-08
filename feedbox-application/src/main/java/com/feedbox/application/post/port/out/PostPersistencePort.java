@@ -1,6 +1,6 @@
 package com.feedbox.application.post.port.out;
 
-import com.feedbox.domain.model.Post;
+import com.feedbox.domain.model.post.Post;
 
 import java.util.List;
 

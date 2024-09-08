@@ -1,7 +1,7 @@
 package com.feedbox.application.post.port.in;
 
-import com.feedbox.domain.model.Post;
-import com.feedbox.domain.model.ResolvedPost;
+import com.feedbox.domain.model.post.Post;
+import com.feedbox.domain.model.post.ResolvedPost;
 
 import java.util.List;
 

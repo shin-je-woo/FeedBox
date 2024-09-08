@@ -4,7 +4,7 @@ import com.feedbox.application.post.port.out.UserDataPort;
 import com.feedbox.application.subscribing.port.in.SubscribingPostAddToInboxUseCase;
 import com.feedbox.application.subscribing.port.in.SubscribingPostRemoveFromInboxUseCase;
 import com.feedbox.application.subscribing.port.out.SubscribingPostPort;
-import com.feedbox.domain.model.Post;
+import com.feedbox.domain.model.post.Post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
 package com.feedbox.infrastructure.mongodb.document;
 
-import com.feedbox.domain.model.Post;
+import com.feedbox.domain.model.post.Post;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;

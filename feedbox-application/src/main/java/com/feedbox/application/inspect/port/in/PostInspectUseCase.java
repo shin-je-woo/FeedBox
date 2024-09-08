@@ -1,7 +1,7 @@
 package com.feedbox.application.inspect.port.in;
 
-import com.feedbox.domain.model.InspectedPost;
-import com.feedbox.domain.model.Post;
+import com.feedbox.domain.model.post.InspectedPost;
+import com.feedbox.domain.model.post.Post;
 
 public interface PostInspectUseCase {
 
