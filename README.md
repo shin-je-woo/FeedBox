@@ -67,3 +67,4 @@
 - [Spring Data Elasticsearch 설정 및 검색 기능 구현](https://tecoble.techcourse.co.kr/post/2021-10-19-elasticsearch/)
 - [쇼핑몰 만들기 프로젝트 - 엘라스틱 서치(elasticsearch)와 스프링부트 연동해보자](https://velog.io/@yeomyaloo/%EC%87%BC%ED%95%91%EB%AA%B0-%EB%A7%8C%EB%93%A4%EA%B8%B0-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%97%98%EB%9D%BC%EC%8A%A4%ED%8B%B1-%EC%84%9C%EC%B9%98elasticsearch%EC%99%80-%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8-%EC%97%B0%EB%8F%99%ED%95%B4%EB%B3%B4%EC%9E%90)
 - [nori 한국어 형태소 분석기](https://velog.io/@dm911/nori-%ED%95%9C%EA%B5%AD%EC%96%B4-%ED%98%95%ED%83%9C%EC%86%8C-%EB%B6%84%EC%84%9D%EA%B8%B0)
+- [Elastic Search (2) ES 데이터 처리, 검색과 쿼리 - Query DSL](https://velog.io/@hanblueblue/Elastic-Search-2)

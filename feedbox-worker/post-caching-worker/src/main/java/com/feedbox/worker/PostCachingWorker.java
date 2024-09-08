@@ -9,12 +9,14 @@ import com.feedbox.infrastructure.kafka.common.Topic;
 import com.feedbox.infrastructure.kafka.mapper.OriginalPostMessageMapper;
 import com.feedbox.infrastructure.kafka.message.OriginalPostMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 import static com.feedbox.infrastructure.kafka.common.OperationType.*;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class PostCachingWorker {
@@ -42,6 +44,7 @@ public class PostCachingWorker {
         if(DELETE.equals(operationType)) {
             handleDelete(originalPostMessage);
         }
+        log.info("컨텐츠 캐싱 완료. OperationType = {}", operationType);
     }
 
     private void handleCreate(OriginalPostMessage originalPostMessage) {

@@ -10,10 +10,12 @@ import com.feedbox.infrastructure.kafka.common.Topic;
 import com.feedbox.infrastructure.kafka.mapper.OriginalPostMessageMapper;
 import com.feedbox.infrastructure.kafka.message.OriginalPostMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class PostInspectWorker {
@@ -42,6 +44,7 @@ public class PostInspectWorker {
         if (OperationType.DELETE.equals(operationType)) {
             this.handleDelete(originalPostMessage);
         }
+        log.info("컨텐츠 검수 완료. OperationType = {}", operationType);
     }
 
     private void handleCreate(OriginalPostMessage originalPostMessage) {

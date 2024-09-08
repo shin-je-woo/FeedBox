@@ -8,10 +8,12 @@ import com.feedbox.infrastructure.kafka.common.OperationType;
 import com.feedbox.infrastructure.kafka.common.Topic;
 import com.feedbox.infrastructure.kafka.message.InspectedPostMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class PostSubscribingWorker {
@@ -40,6 +42,7 @@ public class PostSubscribingWorker {
         if (OperationType.DELETE.equals(operationType)) {
             handleDelete(inspectedPostMessage);
         }
+        log.info("컨텐츠 구독자에게 전달 완료. OperationType = {}", operationType);
     }
 
     private void handleCreate(InspectedPostMessage inspectedPostMessage) {
