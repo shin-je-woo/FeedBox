@@ -19,4 +19,13 @@ public class InspectedPostMessageMapper {
                 )
                 .build();
     }
+
+    public static InspectedPost toDomain(InspectedPostMessage inspectedPostMessage) {
+        return InspectedPost.builder()
+                .post(inspectedPostMessage.getPayload().getPost())
+                .categoryName(inspectedPostMessage.getPayload().getCategoryName())
+                .tags(inspectedPostMessage.getPayload().getTags())
+                .inspectedAt(inspectedPostMessage.getPayload().getInspectedAt())
+                .build();
+    }
 }

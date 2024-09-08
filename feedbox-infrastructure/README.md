@@ -59,3 +59,97 @@ db.subscribingInboxPosts.getIndexes()
     "read": false
 }
 ```
+
+# Elasticsearch 알아보기
+
+- Elasticsearch는 기본적으로 REST API를 제공한다. 따라서, HTTP Request를 통해 데이터를 주고 받을 수 있다.
+- Elastic Kibana의 Dev Tools(http://localhost:5601/app/dev_tools#/console)에 접속하면 좀 더 쉽게 query가 가능하다.
+
+### 한국어 분석기
+
+- ES는 언어별로 분석기를 지원하는데, 한국어는 지원을 안하는 거 같음
+- 플러그인으로 한국어 분석기를 사용할 수 있는데, 아래 url에서 nori 라는 분석기 레퍼런스가 있어서 이거 사용
+- https://esbook.kimjmin.net/06-text-analysis/6.7-stemming/6.7.2-nori
+
+### index 생성 및 사용
+```sh
+PUT post
+{
+  "mappings" : {
+    "properties" : {
+      "id" : {
+        "type" : "long"
+      },
+      "title" : {
+        "type" : "text",
+        "analyzer": "nori"
+      },
+      "content" : {
+        "type" : "text",
+        "analyzer": "nori"
+      },
+      "categoryName" : {
+        "type" : "keyword"
+      },
+      "tags" : {
+        "type" : "keyword"
+      },
+      "indexedAt": {
+        "type": "date",
+        "format": "date_optional_time||epoch_millis"
+      }
+    }
+  },
+  "settings" : {
+    "index" : {
+      "number_of_shards" : 1,
+      "number_of_replicas" : 0
+    }
+  }
+}
+```
+
+이후, 아래 명령어를 통해 index가 생성되었는지 확인 가능하다.
+
+```sh
+GET post
+```
+
+검색은 아래와 같이 진행한다.
+
+```sh
+GET post/_search
+{
+  "query": {
+    "bool": {
+      "should": [
+        { "match": { "title": { "query": "검색어" } } },
+        { "match": { "content": { "query": "검색어" } } },
+        { "term": { "categoryName": "검색어" } },
+        { "term": { "tags": "검색어" } }
+      ]
+    }
+  },
+  "from": 0,
+  "size": 5
+}
+```
+
+### Document 예시
+```json
+{
+  "_class" : "com.feedbox.infrastructure.elasticsearch.document.PostDocument",
+  "id" : 1,
+  "title" : "유산소 운동과 심혈관 건강",
+  "content" : "유산소 운동은 심장과 혈관 건강을 증진시켜 고혈압과 심장 질환의 위험을 줄여줍니다.",
+  "categoryName" : "헬스",
+  "tags" : [
+    "헬스",
+    "유산소 운동",
+    "심혈관 건강",
+    "고혈압",
+    "심장 질환"
+  ],
+  "indexedAt" : "2024-09-08T18:40:52.490"
+}
+```

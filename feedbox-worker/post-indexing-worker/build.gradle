@@ -1,0 +1,7 @@
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+
+    implementation(project(":feedbox-domain"))
+    implementation(project(":feedbox-application"))
+    implementation(project(":feedbox-infrastructure"))
+}

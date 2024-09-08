@@ -23,6 +23,9 @@ spring:
     redis:
       host: localhost
       port: 6379
+    elasticsearch:
+      host: localhost
+      port: 9200
 
 userdata-server:
   url: http://localhost:8088

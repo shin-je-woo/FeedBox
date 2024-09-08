@@ -19,6 +19,10 @@ spring:
       ddl-auto: none
   kafka:
     bootstrap-servers: localhost:9092, localhost:9093, localhost:9094
+  data:
+    elasticsearch:
+      host: localhost
+      port: 9200
 
 userdata-server:
   url: http://localhost:8088
