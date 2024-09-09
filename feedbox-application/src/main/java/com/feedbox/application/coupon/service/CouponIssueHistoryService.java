@@ -18,7 +18,8 @@ public class CouponIssueHistoryService implements CouponIssueHistoryUseCase {
 
     @Override
     public boolean issueCouponIfFirstRequest(Long couponEventId, Long userId) {
-        return couponIssueRequestHistoryPort.addHistoryIfNotExists(couponEventId, userId);
+        CouponEvent couponEvent = getCouponEvent(couponEventId);
+        return couponIssueRequestHistoryPort.addHistoryIfNotExists(couponEvent.getId(), userId);
     }
 
     @Override
@@ -35,6 +36,7 @@ public class CouponIssueHistoryService implements CouponIssueHistoryUseCase {
         return couponEventCachePort.get(couponEventId)
                 .orElseGet(() -> {
                     CouponEvent couponEvent = couponEventPersistencePort.findById(couponEventId);
+                    if (couponEvent == null) throw new RuntimeException("쿠폰 이벤트가 존재하지 않습니다.");
                     couponEventCachePort.set(couponEvent);
                     return couponEvent;
                 });

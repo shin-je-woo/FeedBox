@@ -1,6 +1,7 @@
 package com.feedbox.infrastructure.mysql.coupon.mapper;
 
 import com.feedbox.domain.model.coupon.Coupon;
+import com.feedbox.domain.model.coupon.ResolvedCoupon;
 import com.feedbox.infrastructure.mysql.coupon.entity.CouponEntity;
 
 public class CouponEntityMapper {
@@ -22,6 +23,13 @@ public class CouponEntityMapper {
                 .couponEventId(couponEntity.getCouponEventId())
                 .issuedAt(couponEntity.getIssuedAt())
                 .usedAt(couponEntity.getUsedAt())
+                .build();
+    }
+
+    public static ResolvedCoupon toResolvedCoupon(CouponEntity couponEntity) {
+        return ResolvedCoupon.builder()
+                .coupon(CouponEntityMapper.toDomain(couponEntity))
+                .couponEvent(CouponEventEntityMapper.toDomain(couponEntity.getCouponEventEntity()))
                 .build();
     }
 }

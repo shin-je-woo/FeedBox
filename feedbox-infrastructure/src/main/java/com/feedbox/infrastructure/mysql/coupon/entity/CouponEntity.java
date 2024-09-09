@@ -1,9 +1,6 @@
 package com.feedbox.infrastructure.mysql.coupon.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -19,7 +16,11 @@ public class CouponEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long userId;
+    @Column(name = "coupon_event_id")
     private Long couponEventId;
     private LocalDateTime issuedAt;
     private LocalDateTime usedAt;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "coupon_event_id", nullable = false, insertable = false, updatable = false)
+    private CouponEventEntity couponEventEntity;
 }

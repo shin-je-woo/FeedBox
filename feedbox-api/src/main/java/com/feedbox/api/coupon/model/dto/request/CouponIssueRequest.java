@@ -1,4 +1,4 @@
-package com.feedbox.api.coupon.model.dto;
+package com.feedbox.api.coupon.model.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
