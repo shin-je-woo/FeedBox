@@ -12,6 +12,7 @@ Docker로 8089포트에 kafka-ui 실행시킬 수 있게 세팅 완료
 
 - feedbox.post.original  (파티션 3, Replication Factor 2, Min In Sync Replicas 2)
 - feedbox.post.inspected (파티션 3, Replication Factor 2, Min In Sync Replicas 2)
+- feedbox.coupon.request (파티션 3, Replication Factor 2, Min In Sync Replicas 2)
 
 ReplicationFactor와 Min In Sync Replicas 갯수는 상관 없음
 
@@ -70,6 +71,11 @@ db.subscribingInboxPosts.getIndexes()
 - ES는 언어별로 분석기를 지원하는데, 한국어는 지원을 안하는 거 같음
 - 플러그인으로 한국어 분석기를 사용할 수 있는데, 아래 url에서 nori 라는 분석기 레퍼런스가 있어서 이거 사용
 - https://esbook.kimjmin.net/06-text-analysis/6.7-stemming/6.7.2-nori
+- 다음 명령어를 통해 nori plugin을 다운로드 한다.
+
+```
+bin/elasticsearch-plugin install analysis-nori
+```
 
 ### index 생성 및 사용
 ```sh

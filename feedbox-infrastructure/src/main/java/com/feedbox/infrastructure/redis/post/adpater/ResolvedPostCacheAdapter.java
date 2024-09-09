@@ -1,4 +1,4 @@
-package com.feedbox.infrastructure.redis.adpater;
+package com.feedbox.infrastructure.redis.post.adpater;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

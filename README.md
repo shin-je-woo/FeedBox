@@ -2,7 +2,7 @@
 
 ## ✋ 프로젝트 소개
 
-- 컨텐츠 발행 및 구독서비스입니다.
+- 컨텐츠 구독서비스입니다.
 - 핵심 기능에 집중하기 위해 로그인과 같은 기본 기능은 생략합니다.
 - 다른 팀과 협업한다고 가정합니다.
 
@@ -11,6 +11,8 @@
 - User는 컨텐츠를 발행한다.
 - User는 다른 User를 구독할 수 있다. 구독자는 발행된 컨텐츠를 읽을 수 있다.
 - 검색기능을 제공한다.
+- User는 구독료 할인 Coupon 발급 요청을 할 수 있다.
+- 쿠폰은 인당 1개로 제한하며, 전체 수량은 10개이다. 선착순으로 발급된다.
 
 ## ✋ 프로젝트 진행을 위한 Case 가정
 
@@ -57,6 +59,15 @@
   - 재시도 5회가 초과되면 컨슈머는 DLT에 실패한 메시지를 발행한다. 
   - DLT에 발행된 이벤트는 어떻게 처리할까?
 
+- 선착순 쿠폰발급은 요청이 한번에 몰릴 때 DB부하가 생겨 장애로 이어질 수 있다.
+  - 게다가, 쿠폰발급이력을 DB에 Write하고 응답하는 것은 유저 사용성에 좋지 않을 수 있다.
+  - 이럴 때 Kafka를 이용해서 DB부하를 줄일 수 있다.
+    - 만약, 100명의 유저가 한번에 몰려 발급 요청을 한다면 DB에 100개의 요청이 몰리게 된다.
+    - Kafka는 토픽에 있는 데이터를 큐와 같이 순차적으로 가져와 처리하게 된다.
+    - 이 과정에서 처리량을 개발자가 정할 수 있다. 따라서, DB에 부하가 한번에 집중되는 것을 막을 수 있다.
+  - API서버는 쿠폰잔여갯수가 남아있을 때 Kafka에 produce만 하고 바로 응답하고, 별도의 Consumer가 DB에 저장처리하면 API서버의 latency를 줄일 수 있다.
+  - 쿠폰잔여갯수는 분산서버를 고려해 Redis에서 관리한다.
+
 ## 참고 사이트
 
 - [프로젝트에 새로운 아키텍처 적용하기](https://medium.com/naverfinancial/%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EC%97%90-%EC%83%88%EB%A1%9C%EC%9A%B4-%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98-%EC%A0%81%EC%9A%A9%ED%95%98%EA%B8%B0-99d70df6122b)
@@ -68,3 +79,4 @@
 - [쇼핑몰 만들기 프로젝트 - 엘라스틱 서치(elasticsearch)와 스프링부트 연동해보자](https://velog.io/@yeomyaloo/%EC%87%BC%ED%95%91%EB%AA%B0-%EB%A7%8C%EB%93%A4%EA%B8%B0-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%97%98%EB%9D%BC%EC%8A%A4%ED%8B%B1-%EC%84%9C%EC%B9%98elasticsearch%EC%99%80-%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8-%EC%97%B0%EB%8F%99%ED%95%B4%EB%B3%B4%EC%9E%90)
 - [nori 한국어 형태소 분석기](https://velog.io/@dm911/nori-%ED%95%9C%EA%B5%AD%EC%96%B4-%ED%98%95%ED%83%9C%EC%86%8C-%EB%B6%84%EC%84%9D%EA%B8%B0)
 - [Elastic Search (2) ES 데이터 처리, 검색과 쿼리 - Query DSL](https://velog.io/@hanblueblue/Elastic-Search-2)
+- [[식구하자_MSA] Redis+Kafka 선착순 시스템 쿠폰 서비스 구현해보자!](https://velog.io/@mw310/%EC%8B%9D%EA%B5%AC%ED%95%98%EC%9E%90MSA-%EC%84%A0%EC%B0%A9%EC%88%9C-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%BF%A0%ED%8F%B0-%EC%84%9C%EB%B9%84%EC%8A%A4-%EA%B5%AC%ED%98%84%ED%95%B4%EB%B3%B4%EC%9E%90)

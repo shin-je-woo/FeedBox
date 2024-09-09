@@ -9,3 +9,22 @@ CREATE TABLE IF NOT EXISTS post
     updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '콘텐츠 수정일시',
     deleted_at  TIMESTAMP COMMENT '콘텐츠 삭제일시'
 );
+
+CREATE TABLE IF NOT EXISTS coupon_event
+(
+    id           INT AUTO_INCREMENT PRIMARY KEY COMMENT '쿠폰 이벤트 id',
+    display_name VARCHAR(100) NOT NULL COMMENT '쿠폰 디스플레이용 이름',
+    expires_at   TIMESTAMP    NOT NULL COMMENT '쿠폰 만료기한',
+    issue_limit  BIGINT       NOT NULL COMMENT '쿠폰 발급 제한 갯수'
+);
+
+CREATE TABLE IF NOT EXISTS coupon
+(
+    id              INT AUTO_INCREMENT PRIMARY KEY COMMENT '쿠폰 id',
+    coupon_event_id INT       NOT NULL COMMENT '쿠폰 이벤트 id',
+    user_id         INT       NOT NULL COMMENT '쿠폰을 발급받은 user id',
+    issued_at       TIMESTAMP NOT NULL COMMENT '쿠폰 발급 일시',
+    used_at         TIMESTAMP COMMENT '쿠폰 사용 일시',
+    UNIQUE KEY unique_user_id_coupon_event_id (user_id, coupon_event_id),
+    FOREIGN KEY (coupon_event_id) REFERENCES coupon_event (id)
+);
