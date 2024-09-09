@@ -13,6 +13,6 @@ public class CouponIssueRequestService implements CouponIssueRequestUseCase {
 
     @Override
     public void requestIssue(Long couponEventId, Long userId) {
-        couponIssueRequestProducePort.sendMessage(couponEventId, userId);
+        couponIssueRequestProducePort.sendMessage(userId, couponEventId);
     }
 }
