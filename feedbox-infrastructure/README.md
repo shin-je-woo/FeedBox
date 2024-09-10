@@ -159,3 +159,124 @@ GET post/_search
   "indexedAt" : "2024-09-08T18:40:52.490"
 }
 ```
+
+### access log index template
+
+```sh
+POST _template/access-log-index-template
+{
+  "index_patterns": [
+    "access-log-*"
+  ],
+  "aliases": {
+    "access-log": {}
+  },
+  "mappings": {
+    "properties": {
+      "@timestamp": {
+        "type": "date"
+      },
+      "@version": {
+        "type": "keyword"
+      },
+      "agent": {
+        "properties": {
+          "ephemeral_id": {
+            "type": "keyword"
+          },
+          "hostname": {
+            "type": "keyword"
+          },
+          "id": {
+            "type": "keyword"
+          },
+          "name": {
+            "type": "keyword"
+          },
+          "type": {
+            "type": "keyword"
+          },
+          "version": {
+            "type": "keyword"
+          }
+        }
+      },
+      "bytes": {
+        "type": "keyword"
+      },
+      "client_ip": {
+        "type": "keyword"
+      },
+      "duration": {
+        "type": "keyword"
+      },
+      "ecs": {
+        "properties": {
+          "version": {
+            "type": "keyword"
+          }
+        }
+      },
+      "host": {
+        "properties": {
+          "name": {
+            "type": "keyword"
+          }
+        }
+      },
+      "http_method": {
+        "type": "keyword"
+      },
+      "http_version": {
+        "type": "keyword"
+      },
+      "input": {
+        "properties": {
+          "type": {
+            "type": "keyword"
+          }
+        }
+      },
+      "log": {
+        "properties": {
+          "file": {
+            "properties": {
+              "path": {
+                "type": "keyword"
+              }
+            }
+          },
+          "offset": {
+            "type": "long"
+          }
+        }
+      },
+      "message": {
+        "type": "text"
+      },
+      "port": {
+        "type": "keyword"
+      },
+      "referrer": {
+        "type": "text"
+      },
+      "request_path": {
+        "type": "text"
+      },
+      "response_status": {
+        "type": "keyword"
+      },
+      "timestamp": {
+        "type": "date",
+        "format": "dd/MMM/yyyy:HH:mm:ss Z"
+      },
+      "type": {
+        "type": "keyword"
+      },
+      "user_agent": {
+        "type": "text"
+      }
+    }
+  }
+}
+```
