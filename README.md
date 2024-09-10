@@ -22,11 +22,26 @@
 - 내가 속한 팀은 유저정보 팀의 REST API를 호출해서 유저정보를 가져온다.
   - 유저정보 팀API는 오류가 발생할 수 있다! (1초 지연 후 500Error)
 
+## 🛠️ Skills
+
+- `Java17`
+- `Spring Boot`, `JPA`
+- `MySQL`, `Redis`, `MongoDB`, `Eliasticsearch`
+- `Apache Kafka`
+- `Docker`
+
+## ✋ 도식화
+
+![image](https://github.com/user-attachments/assets/0af6ceed-1bff-4228-b843-23f33f33a2c7)
+
+![image](https://github.com/user-attachments/assets/36fa241e-48cd-493b-80f4-c9b8f1219b55)
+
+
 ## ✋ 개발 내역
 1) 작성자가 컨텐츠를 발행한다.
   - 컨텐츠는 발행 즉시 Mysql에 데이터가 저장된다.
   - 작성된 콘텐츠는 Kafka에 produce 된다. (토픽 = feedbox.post.original)
-  - feedbox.post.original 토픽을 구독하던 Kafka 컨슈머가 원본 컨텐츠를 Redis에 캐싱한다.
+  - feedbox.post.original 토픽을 구독하던 Kafka 컨슈머가 원본 컨텐츠 + 유저팀 API 호출결과를 Redis에 캐싱한다.
 2) 발행된 컨텐츠를 검수한다.
   - feedbox.post.original 토픽을 구독하던 Kafaka 컨슈머가 원본 컨텐츠를 consume한다.
   - 컨슈머는 메시지를 받아서 유저정보 팀서버에 카테고리 정보API를 요청한다. 
@@ -38,7 +53,7 @@
   - 유저정보팀은 구독자 목록을 반환한다. (Case 가정에 따라 구독자 목록API는 20%확률로 실패한다.)
   - 검수된 컨텐츠, 구독자 정보를 조합해서 구독함(MongoDB)에 저장한다.
 4) 구독함에서 컨텐츠 목록을 조회한다.
-   - MySQL에서 컨텐츠 원본정보를 가져온다.
+   - MySQL에서 컨텐츠 원본정보를 가져온다. ([개선] Redis캐싱된 데이터가 있으면 바로 반환한다.)
    - 구독함(MongoDB)에 저장된 검수된 컨텐츠, 구독자 정보를 가져온다.
    - 각 컨텐츠마다 유저정보 팀서버에 유저정보API, 카테고리 정보API를 호출해서 유저정보를 가져온다.
    - [개선] 유저정보 서버 API들은 20%확률로 1초 지연 후 500Error가 발생할 수 있기 때문에 가져온 정보는 Redis에 캐싱해두고 사용한다.
@@ -68,11 +83,11 @@
 - 선착순 쿠폰발급은 요청이 한번에 몰릴 때 DB부하가 생겨 장애로 이어질 수 있다.
   - 게다가, 쿠폰발급이력을 DB에 Write하고 응답하는 것은 유저 사용성에 좋지 않을 수 있다.
   - 이럴 때 Kafka를 이용해서 DB부하를 줄일 수 있다.
-    - 만약, 100명의 유저가 한번에 몰려 발급 요청을 한다면 DB에 100개의 요청이 몰리게 된다.
+    - 만약, 10,000명의 유저가 한번에 몰려 발급 요청을 한다면 DB에 100,00개의 요청이 몰리게 된다.
     - Kafka는 토픽에 있는 데이터를 큐와 같이 순차적으로 가져와 처리하게 된다.
     - 이 과정에서 처리량을 개발자가 정할 수 있다. 따라서, DB에 부하가 한번에 집중되는 것을 막을 수 있다.
-  - API서버는 쿠폰잔여갯수가 남아있을 때 Kafka에 produce만 하고 바로 응답하고, 별도의 Consumer가 DB에 저장처리하면 API서버의 latency를 줄일 수 있다.
-  - 쿠폰잔여갯수는 분산서버를 고려해 Redis에서 관리한다.
+  - API서버는 쿠폰잔여갯수가 남아있을 때 Kafka에 produce만 하고 바로 응답하고, 별도의 Consumer가 DB에 저장처리하면 API서버의 응답 시간을 줄일 수 있다.
+  - 쿠폰잔여갯수는 분산서버 및 DB부하를 고려해 인메모리 DB인 Redis에서 관리한다.
 
 ## 참고 사이트
 
