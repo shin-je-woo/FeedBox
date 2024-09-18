@@ -80,6 +80,13 @@
   - 재시도 5회가 초과되면 컨슈머는 DLT에 실패한 메시지를 발행한다. 
   - DLT에 발행된 이벤트는 어떻게 처리할까?
 
+- 도메인 로직과 이벤트 발행을 원자적으로 묶는 방법 ?
+  - 현재 구현된 상태로는 트랜잭션 커밋 이후에 카프카에 이벤트를 발행하는 방법이다.
+  - 만약, 도메인 로직은 커밋되고, 카프카 이벤트 발행에 실패한다면?
+  - 원자성이 지켜지지 않고 데이터 정합성이 깨지게 된다.
+  - Transactional Outbox Pattern을 적용하거나, 카프카 커넥트의 CDC를 이용하면 해결할 수 있다.
+  - Transactional Outbox Pattern을 적용하면 메시지 발행 순서를 지킬 수 있다는 장점도 얻을 수 있다.
+
 - 선착순 쿠폰발급은 요청이 한번에 몰릴 때 DB부하가 생겨 장애로 이어질 수 있다.
   - 게다가, 쿠폰발급이력을 DB에 Write하고 응답하는 것은 유저 사용성에 좋지 않을 수 있다.
   - 이럴 때 Kafka를 이용해서 DB부하를 줄일 수 있다.
@@ -104,3 +111,5 @@
 - [아파치 엑세스 로그를 엘라스틱서치에 인덱싱 해보자.](https://taetaetae.github.io/2018/01/25/apache-access-log-to-es/)
 - [Circuitbreaker를 사용한 장애 전파 방지](https://oliveyoung.tech/blog/2023-08-31/circuitbreaker-inventory-squad/)
 - [개발자 의식의 흐름대로 적용해보는 서킷브레이커](https://techblog.woowahan.com/15694/)
+- [트랜잭셔널 아웃박스 패턴의 실제 구현 사례 (29CM)](https://medium.com/@greg.shiny82/%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%94%EB%84%90-%EC%95%84%EC%9B%83%EB%B0%95%EC%8A%A4-%ED%8C%A8%ED%84%B4%EC%9D%98-%EC%8B%A4%EC%A0%9C-%EA%B5%AC%ED%98%84-%EC%82%AC%EB%A1%80-29cm-0f822fc23edb)
+- [분산 시스템에서 메시지 안전하게 다루기](https://blog.gangnamunni.com/post/transactional-outbox/)

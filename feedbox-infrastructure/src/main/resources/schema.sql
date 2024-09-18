@@ -28,3 +28,13 @@ CREATE TABLE IF NOT EXISTS coupon
     UNIQUE KEY unique_user_id_coupon_event_id (user_id, coupon_event_id),
     FOREIGN KEY (coupon_event_id) REFERENCES coupon_event (id)
 );
+
+CREATE TABLE IF NOT EXISTS event_outbox
+(
+    id            INT AUTO_INCREMENT PRIMARY KEY COMMENT '이벤트 id',
+    outbox_type   ENUM ('POST') COMMENT '이벤트 타입',
+    event_payload TEXT COMMENT '이벤트 페이로드(JSON)',
+    published     BOOLEAN COMMENT '이벤트 발행 여부',
+    created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '이벤트 생성일시',
+    updated_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '이벤트 수정일시'
+);

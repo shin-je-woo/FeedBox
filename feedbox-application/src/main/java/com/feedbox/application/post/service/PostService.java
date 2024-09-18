@@ -1,9 +1,10 @@
 package com.feedbox.application.post.service;
 
+import com.feedbox.application.post.event.PostChangedEventPayload;
 import com.feedbox.application.post.port.in.*;
 import com.feedbox.application.post.port.in.dto.PostCreateDto;
 import com.feedbox.application.post.port.in.dto.PostUpdateDto;
-import com.feedbox.application.post.port.out.OriginalPostMessageProducePort;
+import com.feedbox.application.post.port.out.PostChangedEventOutboxPort;
 import com.feedbox.application.post.port.out.PostPersistencePort;
 import com.feedbox.domain.model.post.Post;
 import com.feedbox.domain.model.post.ResolvedPost;
@@ -17,11 +18,12 @@ public class PostService implements PostCreateUseCase, PostReadUseCase, PostUpda
 
     private final PostResolvingUseCase postResolvingUseCase;
     private final PostPersistencePort postPersistencePort;
-    private final OriginalPostMessageProducePort originalPostMessageProducePort;
+    private final PostChangedEventOutboxPort postChangedEventOutboxPort;
 
     /**
      * 콘텐츠를 생성한다.
      * 1) Mysql에 저장 2) Kafka 메시지 발행
+     * Kafka 메시지 발행은 Transactional Outbox pattern 적용
      */
     @Transactional
     @Override
@@ -33,7 +35,7 @@ public class PostService implements PostCreateUseCase, PostReadUseCase, PostUpda
                 postCreateDto.getCategoryId()
         );
         Post savedPost = postPersistencePort.save(post);
-        originalPostMessageProducePort.sendCreateMessage(savedPost);
+        postChangedEventOutboxPort.save(PostChangedEventPayload.create(savedPost, PostChangedEventPayload.OperationType.CREATE));
         return savedPost;
     }
 
@@ -46,6 +48,7 @@ public class PostService implements PostCreateUseCase, PostReadUseCase, PostUpda
      * 콘텐츠를 수정한다.
      * 1) Mysql에 저장 2) Kafka 메시지 발행
      * 도메인 영역을 보호하지만, Layer를 나눴기 때문에 JPA의 장점인 변경감지를 사용하지 못한다.
+     * Kafka 메시지 발행은 Transactional Outbox pattern 적용
      */
     @Transactional
     @Override
@@ -57,13 +60,14 @@ public class PostService implements PostCreateUseCase, PostReadUseCase, PostUpda
                 postUpdateDto.getCategoryId()
         );
         Post updatedPost = postPersistencePort.save(post);
-        originalPostMessageProducePort.sendUpdateMessage(updatedPost);
+        postChangedEventOutboxPort.save(PostChangedEventPayload.create(updatedPost, PostChangedEventPayload.OperationType.UPDATE));
         return updatedPost;
     }
 
     /**
      * 콘텐츠를 삭제한다.
      * 1) Mysql에 저장 2) Kafka 메시지 발행
+     * Kafka 메시지 발행은 Transactional Outbox pattern 적용
      */
     @Override
     public void delete(Long postId) {
@@ -71,6 +75,6 @@ public class PostService implements PostCreateUseCase, PostReadUseCase, PostUpda
         if (post == null) return;
         post.delete();
         Post deletedPost = postPersistencePort.save(post);
-        originalPostMessageProducePort.sendDeleteMessage(deletedPost.getId());
+        postChangedEventOutboxPort.save(PostChangedEventPayload.create(deletedPost, PostChangedEventPayload.OperationType.DELETE));
     }
 }

@@ -2,11 +2,13 @@ package com.feedbox.domain.model.post;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Builder
+@ToString(of = {"id", "title"})
 public class Post {
 
     private Long id;
